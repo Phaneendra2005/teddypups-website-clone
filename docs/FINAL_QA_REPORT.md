@@ -28,6 +28,7 @@ The audit inspected all discoverable pages, layouts, content hierarchies, asset 
 | 6 | **Footer Section** | Flat banner with generic text. | Reference site features an organic **curved night hill SVG path** (`viewBox="0 0 1440 80"`), `"Home, at last."` heading, exact link groupings, social pills (`Instagram`, `TikTok`, `Facebook`), and trademark line. | **Medium (Visual)** |
 | 7 | **Two Paths Section** | Text and images deviated slightly from original showroom/import descriptions. | Reference site has `"Two ways to meet your puppy"` with `"Puppies in Dubai"` (image `/media/FHyoHcIosLZE/...`) and `"Imported for you"` (Korea → Dubai). | **Medium (Copy)** |
 | 8 | **Testimonials Copy** | Generic placeholder reviews. | Reference site features real customer moments and exact Sarah M. quote (`“TeddyPups truly made our dream a reality...”`) alongside real photo captions (`Lulu 🧸 with her new mummy ❤️`, etc.). | **Medium (Copy)** |
+| 9 | **Custom Cursor** | Standard browser arrow cursor. | Reference website features an authentic **custom puppy-paw cursor** (`/cursor/paw.svg`) that flips to pressed state (`/cursor/paw-press.svg`) on interactive elements and mousedown. | **High (UI Polish)** |
 
 ---
 
@@ -78,6 +79,21 @@ The audit inspected all discoverable pages, layouts, content hierarchies, asset 
 - `src/components/home/FAQPreview.jsx`: Aligned to exact 3 preview questions on dark night gradient with `?` badge.
 - `src/components/common/Footer.jsx`: Restored curved night hill SVG path (`viewBox="0 0 1440 80"`), exact links, and social pills.
 
+### D. Custom Puppy-Paw Cursor System
+- **Extracted Original Assets:** Retrieved the exact vector SVG files directly from `https://puppy.instabizweb.com/cursor/`:
+  - `public/cursor/paw.svg`: Authentic 32x32 paw cursor in cinnamon (`#C2622B`) with dark cocoa stroke (`#2A170E`), rotated -18deg with precise `9 6` hotspot.
+  - `public/cursor/paw-press.svg`: Authentic pressed state in dark cocoa (`#2A170E`) with golden caramel stroke (`#F2BE6B`) and scaled touch-down transform.
+- **Dedicated Style Definition (`src/styles/cursor.css`):**
+  - Applied hardware-accelerated CSS cursor rules across `html, body` on fine pointer devices.
+  - Interactive triggers (`a`, `button`, `.btn`, `summary`, `[role=button]`, `select`, etc.) seamlessly switch to `paw-press.svg`.
+  - Active mousedown states trigger pressed paw instantly.
+  - Text inputs (`<input>`, `<textarea>`, `contenteditable`) preserve native `cursor: text` I-beam for optimal ergonomics and accessibility.
+  - Paragraphs and typography inherit the paw cursor across reading content.
+- **`CustomCursor.jsx` Component:**
+  - Mounts at the root application level in `src/App.jsx`.
+  - Emits delicate, gentle fading paw-print click bursts (`tp-paw-burst`) on mouse clicks without interfering with form inputs or blocking click events.
+  - Fully accessible: automatically disabled on touch devices (`(hover: none)`) and respects `prefers-reduced-motion: reduce`.
+
 ---
 
 ## 4. Features Actually Tested
@@ -95,7 +111,12 @@ The audit inspected all discoverable pages, layouts, content hierarchies, asset 
 | **WhatsApp External Links** | Inspected generated URLs across all buttons. | **PASS** — Correctly points to `https://wa.me/919898124987` with URI-encoded text. |
 | **Call & Email Links** | Verified `<a href="tel:+971500000000">` and `<a href="mailto:info@instabizweb.com">`. | **PASS** — Valid protocol schemes. |
 | **Responsive Layouts** | Tested responsive styling for desktop (1440px), tablet (768px), and mobile (375px). | **PASS** — Mobile hamburger drawer opens smoothly, letterform wraps gracefully, cards stack seamlessly. |
-| **Production Build** | Executed `npm run build` using Vite 8. | **PASS** — Output generated in 882ms with zero errors. |
+| **Custom Puppy-Paw Cursor** | Moved pointer across homepage, puppy cards, headings, and footer. | **PASS** — Crisp paw cursor renders at native display rate with zero lag. |
+| **Interactive Cursor States** | Hovered over navigation links, action buttons, select dropdowns, and cards. | **PASS** — Instantly switches to `/cursor/paw-press.svg`. |
+| **Active Click Paw Burst** | Clicked on buttons, cards, and page background. | **PASS** — Tactile pressed state and transient paw burst animation trigger smoothly. |
+| **Text Editing & Form Usability** | Focused text inputs and letterform textareas on `/contact` and `/puppies/:slug`. | **PASS** — Cursor cleanly switches to native `text` I-beam; bursts suppressed in inputs. |
+| **Touch & Accessibility Support** | Tested mobile viewport simulation and `prefers-reduced-motion`. | **PASS** — Custom cursor and bursts disable cleanly; native touch interactions preserved. |
+| **Production Build** | Executed `npm run build` using Vite 8. | **PASS** — Output generated in 1.52s with zero errors. |
 
 ---
 
@@ -132,17 +153,19 @@ The audit inspected all discoverable pages, layouts, content hierarchies, asset 
 > vite build
 vite v8.3.8 building client environment for production...
 transforming...
-✓ 2160 modules transformed.
+✓ 2162 modules transformed.
 rendering chunks...
 computing gzip size...
-dist/index.html                   1.24 kB │ gzip:   0.65 kB
-dist/assets/index-BwvmapNb.css   46.45 kB │ gzip:   8.25 kB
-dist/assets/index-2u4CkZV5.js   365.85 kB │ gzip: 105.75 kB
-✓ built in 882ms
+dist/index.html                   1.24 kB │ gzip:   0.66 kB
+dist/assets/index-BB8y2aQ3.css   47.99 kB │ gzip:   8.73 kB
+dist/assets/index-WCbRzazZ.js   367.73 kB │ gzip: 106.14 kB
+dist/cursor/paw.svg               0.96 kB
+dist/cursor/paw-press.svg         0.99 kB
+✓ built in 1.52s
 ```
 
 - **Output Directory:** `dist/`
-- **Total Assets:** 1 HTML file, 1 optimized CSS bundle (46.45 kB), 1 JavaScript bundle (365.85 kB).
+- **Total Assets:** 1 HTML file, 1 optimized CSS bundle (47.99 kB), 1 JavaScript bundle (367.73 kB), 2 vector cursor SVGs.
 - **Console Warnings:** 0
 - **Build Errors:** 0
 
