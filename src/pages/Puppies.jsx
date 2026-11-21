@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import PuppyCard from '../components/puppies/PuppyCard';
-import { availablePuppies } from '../data/puppies';
-import { Filter } from 'lucide-react';
+import { availablePuppies, goneHomePuppies, getImageUrl } from '../data/puppies';
+import { DISPLAY_PHONE } from '../utils/whatsapp';
+import { Filter, ArrowRight } from 'lucide-react';
 
 export default function Puppies() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,7 +12,7 @@ export default function Puppies() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Available Puppies — TeddyPups U.A.E.";
+    document.title = "Available puppies | TeddyPups U.A.E.";
   }, []);
 
   const breeds = [
@@ -24,14 +25,19 @@ export default function Puppies() {
   ];
 
   const origins = [
-    { label: 'All Origins', value: 'all' },
-    { label: 'Local Showroom', value: 'local' },
-    { label: 'Imported (Korea)', value: 'imported' },
+    { label: 'All Puppies', value: 'all' },
+    { label: 'In our showroom', value: 'local' },
+    { label: 'Imported for you', value: 'imported' },
   ];
 
   const filteredPuppies = availablePuppies.filter((pup) => {
-    const matchesOrigin = originFilter === 'all' || pup.origin === originFilter;
-    const matchesBreed = breedFilter === 'all' || pup.breed.toLowerCase().includes(breedFilter.toLowerCase());
+    const isImported = pup.where === 'Imported for you';
+    const matchesOrigin =
+      originFilter === 'all' ||
+      (originFilter === 'imported' && isImported) ||
+      (originFilter === 'local' && !isImported);
+    const matchesBreed =
+      breedFilter === 'all' || pup.breed.toLowerCase().includes(breedFilter.toLowerCase());
     return matchesOrigin && matchesBreed;
   });
 
@@ -52,14 +58,17 @@ export default function Puppies() {
   return (
     <div className="pt-28 pb-24 bg-[#fffdf8]">
       <div className="gutter">
-        {/* Page Heading */}
+        {/* Header from Teddy's sketchbook */}
         <div className="max-w-3xl mb-12 space-y-3">
-          <p className="font-scrawl text-2xl text-[#a24a1a]">currently in our care</p>
+          <div className="inline-flex items-center gap-2">
+            <span className="font-scrawl text-2xl text-[#a24a1a]">{DISPLAY_PHONE}</span>
+          </div>
+          <p className="font-scrawl text-2xl text-[#a24a1a]">from Teddy's sketchbook</p>
           <h1 className="font-plush text-4xl sm:text-6xl text-[#2a170e]">
             Available puppies
           </h1>
           <p className="text-base sm:text-lg text-[#2a170e]/80 font-medium">
-            Every listing shows real photos of the actual puppy. Open a profile to see photos, health records, and arrange a showroom cuddle session.
+            Every listing shows real photos of the actual puppy. Open a profile to see them all, then ask us about them on WhatsApp.
           </p>
         </div>
 
@@ -127,25 +136,50 @@ export default function Puppies() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-20">
             {filteredPuppies.map((puppy) => (
               <PuppyCard key={puppy.slug} puppy={puppy} />
             ))}
           </div>
         )}
 
-        {/* Bottom Banner Linking to Gone Home */}
-        <div className="mt-20 p-8 sm:p-12 rounded-3xl bg-[#fbe3b4]/40 border-2 border-dashed border-[#2a170e]/15 text-center space-y-4">
-          <p className="font-scrawl text-2xl text-[#a24a1a]">wondering about our previous litters?</p>
-          <h3 className="font-plush text-2xl sm:text-3xl text-[#2a170e]">
-            See our puppies who have gone home
-          </h3>
-          <p className="text-sm sm:text-base text-[#2a170e]/75 max-w-xl mx-auto font-medium">
-            Browse through puppies who recently found their loving families throughout Dubai, Abu Dhabi, and the GCC.
-          </p>
-          <Link to="/gone-home" className="btn btn-ghost inline-flex text-sm py-2.5 px-6">
-            View Gone Home gallery
-          </Link>
+        {/* Already Gone Home Section */}
+        <div className="mt-20 p-8 sm:p-12 rounded-3xl bg-[#fff1d8]/60 border-2 border-[#2a170e]/10 space-y-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+            <div>
+              <span className="font-scrawl text-2xl text-[#a24a1a]">Already gone home</span>
+              <h2 className="font-plush text-3xl sm:text-4xl text-[#2a170e]">
+                These puppies have found their families.
+              </h2>
+            </div>
+            <Link to="/gone-home" className="btn btn-primary text-xs py-2.5 px-6 shrink-0 flex items-center gap-1.5">
+              <span>See the puppies who've gone home</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Quick Gone Home Preview Cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {goneHomePuppies.slice(0, 5).map((pup) => (
+              <div key={pup.slug} className="group relative rounded-2xl overflow-hidden border border-[#2a170e]/10 bg-[#fffdf8] shadow-sm">
+                <div className="aspect-square relative">
+                  <img
+                    src={getImageUrl(pup.image)}
+                    alt={pup.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2 left-2 bg-[#2a170e]/80 text-[#fffdf8] text-[10px] font-bold py-0.5 px-2 rounded-full">
+                    gone home ♥
+                  </div>
+                </div>
+                <div className="p-3">
+                  <h4 className="font-plush text-sm text-[#2a170e] truncate">{pup.name}</h4>
+                  <p className="text-[11px] text-[#2a170e]/60 truncate">{pup.breed}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

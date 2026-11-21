@@ -5,7 +5,7 @@ import { getImageUrl } from '../../data/puppies';
 import { getPuppyInquiryLink } from '../../utils/whatsapp';
 
 export default function PuppyCard({ puppy }) {
-  const { slug, name, breed, gender, age, origin, status, image } = puppy;
+  const { slug, name, breed, gender, age, where, status, image } = puppy;
 
   return (
     <div className="group relative flex flex-col bg-[#fffdf8] rounded-3xl overflow-hidden border-2 border-[#2a170e]/10 hover:border-[#a24a1a]/40 shadow-sm hover:shadow-xl transition-all duration-300">
@@ -21,9 +21,9 @@ export default function PuppyCard({ puppy }) {
         {/* Origin / Status Tags */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           <span className="font-scrawl px-3 py-0.5 rounded-full bg-[#fbe3b4] text-[#2a170e] text-sm font-bold shadow-sm">
-            {status === 'available' ? 'Available' : 'Reserved'}
+            {status}
           </span>
-          {origin === 'imported' && (
+          {where === 'Imported for you' && (
             <span className="px-2.5 py-0.5 rounded-full bg-[#2a170e] text-[#fffdf8] text-xs font-bold uppercase tracking-wider">
               Imported
             </span>
@@ -45,6 +45,9 @@ export default function PuppyCard({ puppy }) {
           </p>
           <p className="text-xs text-[#2a170e]/70 mt-1 capitalize font-medium">
             {gender} • {age}
+          </p>
+          <p className="text-[11px] text-[#2a170e]/60 font-semibold mt-0.5">
+            {where}
           </p>
         </div>
 
