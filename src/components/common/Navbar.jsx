@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PawIcon from './PawIcon';
+import { MessageCircle } from 'lucide-react';
 import { getWhatsAppLink } from '../../utils/whatsapp';
 
 export default function Navbar() {
@@ -21,6 +22,18 @@ export default function Navbar() {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Puppies', path: '/puppies' },
@@ -39,15 +52,15 @@ export default function Navbar() {
             : 'bg-transparent'
         }`}
       >
-        <div className="gutter flex items-center justify-between h-20">
-          {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
+        <div className="w-full max-w-[110rem] mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between h-16 sm:h-20">
+          {/* Brand Logo & Name */}
+          <Link to="/" className="flex items-center gap-2 sm:gap-2.5 shrink-0 group select-none" aria-label="TeddyPups U.A.E. — home">
             <img 
               src="https://puppy.instabizweb.com/brand/logo.png" 
               alt="TeddyPups Logo" 
-              className="w-12 h-12 object-contain transition-transform duration-200 group-hover:scale-105"
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full object-contain shrink-0 transition-transform duration-200 group-hover:scale-105"
             />
-            <span className="font-plush text-2xl tracking-tight text-[#2a170e]">
+            <span className="font-plush font-extrabold text-[1.18rem] sm:text-2xl text-[#2a170e] tracking-tight leading-none shrink-0">
               TeddyPups
             </span>
           </Link>
@@ -79,25 +92,29 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Action Button & Mobile Menu Trigger */}
-          <div className="flex items-center gap-3">
+          {/* Right Action Buttons */}
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            {/* Compact WhatsApp Us Button */}
             <a 
               href={getWhatsAppLink()} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="btn btn-whatsapp hidden sm:inline-flex text-sm py-2 px-5 shadow-sm"
+              className="inline-flex h-9 sm:h-10 items-center justify-center gap-1.5 px-3 sm:px-4 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs sm:text-sm shadow-sm transition-all whitespace-nowrap active:scale-95"
+              aria-label="Chat on WhatsApp"
             >
-              WhatsApp us
+              <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current shrink-0" />
+              <span>WhatsApp<span className="hidden min-[360px]:inline"> us</span></span>
             </a>
 
+            {/* Mobile Menu Trigger Button */}
             <button 
               type="button" 
               onClick={() => setMobileMenuOpen(true)}
-              className="inline-flex h-11 items-center gap-2 rounded-full border-2 border-[#2a170e] bg-[#fffdf8] px-4 text-[0.95rem] font-bold lg:hidden text-[#2a170e] shadow-sm hover:bg-[#fbe3b4]/30"
+              className="inline-flex h-9 sm:h-10 items-center justify-center gap-1.5 rounded-full border-2 border-[#2a170e] bg-[#fffdf8] hover:bg-[#fbe3b4]/30 px-3 sm:px-4 text-xs sm:text-sm font-bold lg:hidden text-[#2a170e] shadow-sm transition-colors whitespace-nowrap active:scale-95"
               aria-label="Open navigation menu"
             >
-              <PawIcon className="size-4 text-[#a24a1a]" />
-              Menu
+              <PawIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#a24a1a] shrink-0" />
+              <span>Menu</span>
             </button>
           </div>
         </div>
@@ -122,9 +139,9 @@ export default function Navbar() {
           <div className="flex items-center justify-between">
             <span className="font-scrawl text-2xl text-[#a24a1a]">where to, friend?</span>
             <button 
-              type="button"
+              type="button" 
               onClick={() => setMobileMenuOpen(false)}
-              className="h-11 rounded-full bg-[#2a170e] px-6 font-bold text-[#fffdf8] hover:bg-[#422617]"
+              className="h-10 sm:h-11 rounded-full bg-[#2a170e] px-5 sm:px-6 font-bold text-sm sm:text-base text-[#fffdf8] hover:bg-[#422617] active:scale-95 transition-all"
             >
               Close
             </button>
@@ -139,12 +156,12 @@ export default function Navbar() {
                     <Link
                       to={link.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`font-plush flex items-center justify-between text-4xl sm:text-5xl py-2 transition-transform ${
+                      className={`font-plush flex items-center justify-between text-3xl sm:text-5xl py-2 transition-transform ${
                         isActive ? 'text-[#a24a1a] translate-x-2' : 'hover:translate-x-2'
                       }`}
                     >
                       <span>{link.name}</span>
-                      {isActive && <PawIcon className="size-8 text-[#a24a1a]" />}
+                      {isActive && <PawIcon className="size-6 sm:size-8 text-[#a24a1a]" />}
                     </Link>
                   </li>
                 );
@@ -157,7 +174,7 @@ export default function Navbar() {
               href={getWhatsAppLink()} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="btn btn-whatsapp w-full justify-center text-lg py-3.5"
+              className="btn btn-whatsapp w-full justify-center text-base sm:text-lg py-3 sm:py-3.5 shadow-sm"
             >
               WhatsApp us
             </a>
