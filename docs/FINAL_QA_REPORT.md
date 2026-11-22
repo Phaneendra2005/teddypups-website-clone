@@ -89,12 +89,13 @@ The audit inspected all discoverable pages, layouts, content hierarchies, asset 
   - Active mousedown states trigger pressed paw instantly.
   - Text inputs (`<input>`, `<textarea>`, `contenteditable`) preserve native `cursor: text` I-beam for optimal ergonomics and accessibility.
   - Paragraphs and typography inherit the paw cursor across reading content.
-- **`CustomCursor.jsx` Component & Animated Paw Trail:**
+- **`CustomCursor.jsx` Component & High-Performance Canvas Paw Trail:**
   - Mounts at the root application level in `src/App.jsx`.
-  - **Animated Paw-Print Trail:** Emits a subtle, staggered trail of 3–4 small puppy paw prints (`15px × 15px`, 4 toe pads + central pad) behind the moving cursor in soft toffee/caramel (`#e4a352`, 15–28% opacity).
-  - Trail prints dynamically follow the pointer's movement angle (`atan2`) with alternating left and right paw lateral offsets (5.5px) and a natural distance threshold (~34px) so prints appear at sensible walking intervals without clumping or lag.
-  - Each print smoothly fades out and gently scales down over 700ms using hardware-accelerated CSS keyframe transforms (`will-change: transform, opacity`), leaving zero permanent marks or lingering elements when mouse stops.
-  - **Click Burst:** Emits tactile paw-print bursts (`tp-paw-burst`) at click coordinates without blocking clicks or event bubbling (`pointer-events: none`).
+  - **Hardware Canvas Engine (`PawTrailCanvas` Architecture):** Reverse-engineered directly from the reference website's internal canvas trail engine (`_next/static/chunks/04u0_mknmf3rz.js`). Utilizes an ultra-efficient HTML5 canvas overlay with zero DOM thrashing and zero React re-render overhead.
+  - **Luminous Soft Glow Lighting:** Each paw print is rendered using high-precision 2D canvas transforms with a radiant warm caramel shadow blur (`ctx.shadowColor = rgba(242, 190, 107, 0.85)`, `ctx.shadowBlur = 10 * dpr`), authentic cinnamon fill (`#c2622b`), and delicate luminous edge highlight (`rgba(255, 241, 216, 0.65)`). The lighting is crisp and noticeable across both dark backgrounds (night hill footer) and light cream/milk backgrounds without harshness.
+  - **Natural Walking Dynamics:** Implements the reference site's exact 46px walking stride threshold, direction-oriented rotation (`Math.atan2`), and alternating left/right lateral stepping (±7px). Prints appear fluidly behind the cursor rather than looking like static stickers.
+  - **Smooth Staggered Fade & Auto-Sleep:** Stays fully radiant for 600ms, then dissolves non-linearly over the next 400ms down to 0 opacity. Automatically puts the `requestAnimationFrame` loop to sleep when the mouse stops moving (0% idle CPU overhead).
+  - **Tactile Click Burst:** Integrates radiant golden bloom bursts on mouse click.
   - **Form Guard & Accessibility:** Suppressed inside text inputs and textareas to avoid visual distraction during typing; automatically disabled on touch devices (`hover: none`) and respects `prefers-reduced-motion: reduce`.
 
 ---
@@ -115,12 +116,12 @@ The audit inspected all discoverable pages, layouts, content hierarchies, asset 
 | **Call & Email Links** | Verified `<a href="tel:+971500000000">` and `<a href="mailto:info@instabizweb.com">`. | **PASS** — Valid protocol schemes. |
 | **Responsive Layouts** | Tested responsive styling for desktop (1440px), tablet (768px), and mobile (375px). | **PASS** — Mobile hamburger drawer opens smoothly, letterform wraps gracefully, cards stack seamlessly. |
 | **Custom Puppy-Paw Cursor** | Moved pointer across homepage, puppy cards, headings, and footer. | **PASS** — Crisp paw cursor renders at native display rate with zero lag. |
-| **Animated Paw-Print Trail** | Moved pointer across desktop viewports at various speeds. | **PASS** — Trail of ~3-4 delicate paw prints follows pointer direction smoothly with alternating left/right offset and fades out naturally. |
+| **Animated Paw-Print Trail** | Moved pointer across desktop viewports at various speeds and directions (slow, fast, diagonal, circular). | **PASS** — Canvas-rendered trail of ~3–4 luminous golden paw prints follows pointer direction fluidly with alternating step offset and soft bloom. Zero DOM lag. |
 | **Interactive Cursor States** | Hovered over navigation links, action buttons, select dropdowns, and cards. | **PASS** — Instantly switches to `/cursor/paw-press.svg`. |
-| **Active Click Paw Burst** | Clicked on buttons, cards, and page background. | **PASS** — Tactile pressed state and transient paw burst animation trigger smoothly. |
-| **Text Editing & Form Usability** | Focused text inputs and letterform textareas on `/contact` and `/puppies/:slug`. | **PASS** — Cursor cleanly switches to native `text` I-beam; bursts suppressed in inputs. |
-| **Touch & Accessibility Support** | Tested mobile viewport simulation and `prefers-reduced-motion`. | **PASS** — Custom cursor and bursts disable cleanly; native touch interactions preserved. |
-| **Production Build** | Executed `npm run build` using Vite 8. | **PASS** — Output generated in 1.52s with zero errors. |
+| **Active Click Paw Burst** | Clicked on buttons, cards, and page background. | **PASS** — Tactile pressed state and radiant golden bloom burst trigger smoothly. |
+| **Text Editing & Form Usability** | Focused text inputs and letterform textareas on `/contact` and `/puppies/:slug`. | **PASS** — Cursor cleanly switches to native `text` I-beam; trail and bursts suppressed in inputs. |
+| **Touch & Accessibility Support** | Tested mobile viewport simulation and `prefers-reduced-motion`. | **PASS** — Canvas trail and custom cursor disable cleanly; native touch interactions preserved. |
+| **Production Build** | Executed `npm run build` using Vite 8. | **PASS** — Output generated in 1.08s with zero errors. |
 
 ---
 
@@ -160,16 +161,16 @@ transforming...
 ✓ 2162 modules transformed.
 rendering chunks...
 computing gzip size...
-dist/index.html                   1.24 kB │ gzip:   0.65 kB
-dist/assets/index-C7GbFbCE.css   48.58 kB │ gzip:   8.85 kB
-dist/assets/index-CXVqC3MC.js   369.85 kB │ gzip: 106.49 kB
+dist/index.html                   1.24 kB │ gzip:   0.66 kB
+dist/assets/index-kWKmzGiI.css   47.23 kB │ gzip:   8.55 kB
+dist/assets/index-CZ34ymoM.js   369.37 kB │ gzip: 106.82 kB
 dist/cursor/paw.svg               0.96 kB
 dist/cursor/paw-press.svg         0.99 kB
-✓ built in 1.75s
+✓ built in 1.08s
 ```
 
 - **Output Directory:** `dist/`
-- **Total Assets:** 1 HTML file, 1 optimized CSS bundle (48.58 kB), 1 JavaScript bundle (369.85 kB), 2 vector cursor SVGs.
+- **Total Assets:** 1 HTML file, 1 optimized CSS bundle (47.23 kB), 1 JavaScript bundle (369.37 kB), 2 vector cursor SVGs.
 - **Console Warnings:** 0
 - **Build Errors:** 0
 
