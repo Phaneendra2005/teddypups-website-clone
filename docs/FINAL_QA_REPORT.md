@@ -115,6 +115,7 @@ The audit inspected all discoverable pages, layouts, content hierarchies, asset 
 | **WhatsApp External Links** | Inspected generated URLs across all buttons. | **PASS** — Correctly points to `https://wa.me/919898124987` with URI-encoded text. |
 | **Call & Email Links** | Verified `<a href="tel:+971500000000">` and `<a href="mailto:info@instabizweb.com">`. | **PASS** — Valid protocol schemes. |
 | **Responsive Layouts** | Tested responsive styling for desktop (1440px), tablet (768px), and mobile (375px). | **PASS** — Mobile hamburger drawer opens smoothly, letterform wraps gracefully, cards stack seamlessly. |
+| **Mobile Header Layout & Brand Visibility** | Tested header at 320px, 360px, 375px, 390px, 414px, and 430px viewports. | **PASS** — Compact WhatsApp button (36px h) visually balanced with Menu button; TeddyPups brand name remains 100% visible and unclipped without overflow. |
 | **Custom Puppy-Paw Cursor** | Moved pointer across homepage, puppy cards, headings, and footer. | **PASS** — Crisp paw cursor renders at native display rate with zero lag. |
 | **Animated Paw-Print Trail** | Moved pointer across desktop viewports at various speeds and directions (slow, fast, diagonal, circular). | **PASS** — Canvas-rendered trail of ~3–4 luminous golden paw prints follows pointer direction fluidly with alternating step offset and soft bloom. Zero DOM lag. |
 | **Interactive Cursor States** | Hovered over navigation links, action buttons, select dropdowns, and cards. | **PASS** — Instantly switches to `/cursor/paw-press.svg`. |
